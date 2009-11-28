@@ -11,6 +11,11 @@ Console" on my website. The whole article can be read at:
 
     http://www.catonmat.net/blog/follow-hacker-news-from-the-console/
 
+I explained some parts of the code in this program in another article "How
+Reddit Top and Hacker Top Programs Were Made". It can be read here:
+
+http://www.catonmat.net/blog/how-reddit-top-and-hacker-top-programs-were-made/
+
 ------------------------------------------------------------------------------
 
 Table of contents:
@@ -69,6 +74,16 @@ up/down arrows (or j/k) - scrolls the news list up or down.
 
 * Add a feature to open a story in web browser. (Someone suggested to use
   webbrowser module)
+
+* Fix it to work on Windows. (Perhaps try the Console module)
+
+* Merge it with "Reddit Top" program (see below) and create "Social Top"
+  program. Then write plugins for Digg, and other websites.
+
+  Reddit Top is here (currently broken, will fix on Sunday 2009.11.29):
+  http://www.catonmat.net/blog/follow-reddit-from-the-console/
+
+* Add ability to login and vote for the favorite stories.
 
 
 ------------------------------------------------------------------------------
