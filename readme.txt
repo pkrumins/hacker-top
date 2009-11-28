@@ -18,6 +18,7 @@ Table of contents:
     [1] The Hacker Top program.
     [2] Program's usage.
     [3] Keyboard shortcuts.
+    [4] Future TODO improvements.
 
 
 [1]-The-Hacker-Top-program----------------------------------------------------
@@ -62,6 +63,12 @@ q - quits the program.
 u - forces an update of the stories.
 m - changes the display mode.
 up/down arrows (or j/k) - scrolls the news list up or down.
+
+
+[4]-Future-TODO-improvements--------------------------------------------------
+
+* Add a feature to open a story in web browser. (Someone suggested to use
+  webbrowser module)
 
 
 ------------------------------------------------------------------------------
