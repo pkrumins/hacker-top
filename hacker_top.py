@@ -24,6 +24,7 @@ import struct
 import termios
 import datetime
 import threading
+import webbrowser
 from htmlentitydefs import entitydefs
 from pyhackerstories import get_stories, RedesignError, SeriousError, stories_per_page
 
@@ -477,7 +478,15 @@ class Interface(object):
             if self.stories:
                 self.display.display(self.stories)
             return
-
+        elif char == ord('o'):
+            # Open topmost story in webbrrowser (new window)
+            webbrowser.open_new(self.stories[self.start_pos].url)
+            return
+        elif char == ord('t'):
+            # Open topmost story in webbrowser (new tab)
+            webbrowser.open_new_tab(self.stories[self.start_pos].url)
+            return
+            
 class Interval(object):
     """ A class to dealing with refresh intervals """
 
