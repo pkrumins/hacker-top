@@ -69,6 +69,9 @@ u - forces an update of the stories.
 m - changes the display mode.
 up/down arrows (or j/k) - scrolls the news list up or down.
 
+Beta shortcuts:
+o - open the topmost URL in the default webbrowser
+t - open the topmost URL in a new tab in the default webbrowser
 
 [4]-Future-TODO-improvements--------------------------------------------------
 
