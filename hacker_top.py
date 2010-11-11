@@ -486,6 +486,10 @@ class Interface(object):
             # Open topmost story in webbrowser (new tab)
             webbrowser.open_new_tab(self.stories[self.start_pos].url)
             return
+        elif char == ord('c'):
+            # Open topmost story's comments in webbrowser (new tab)
+            webbrowser.open_new_tab(self.stories[self.start_pos].comments_url)
+            return
             
 class Interval(object):
     """ A class to dealing with refresh intervals """

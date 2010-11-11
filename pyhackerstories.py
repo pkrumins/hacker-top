@@ -15,6 +15,7 @@ import time
 import socket
 import urllib2
 import datetime
+from urlparse import urljoin
 from BeautifulSoup import BeautifulSoup
 
 version = "1.0"
@@ -103,7 +104,7 @@ def _extract_stories(content):
             except KeyError:
                 return False
         return td_finder
-        
+
     title_tds = soup.findAll(mk_tag_finder('td', 'title', 1))
     vote_as = soup.findAll('a', id=re.compile(r'up_\d+'))
     subtext_tds = soup.findAll(mk_tag_finder('td', 'subtext', 1))
@@ -158,8 +159,14 @@ def _extract_stories(content):
         else:
             m = re.search(r'(\d+) comment', comment_a.string)
             if not m:
-                raise RedesignError, "could not extract comment cound"
+                raise RedesignError, "could not extract comment count"
             comments = int(m.group(1))
+
+        subtext_urls = subtext_td.findAll('a')
+        comments_url = subtext_urls[-1]['href']
+        if not comments_url:
+            raise RedesignError, "could not find last <a href> in subtext containing comment URL"
+        comments_url = urljoin(hacker_url, comments_url)
 
         story = Story()
         story.id = id
@@ -170,6 +177,7 @@ def _extract_stories(content):
         story.user = user.encode('utf8')
         story.unix_time = unix_time
         story.human_time = human_time.encode('utf8')
+        story.comments_url = comments_url.encode('utf8')
 
         stories.append(story)
 
