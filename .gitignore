@@ -1,0 +1,8 @@
+# Temporary files.
+*~
+*.pyc
+*.swp
+
+# Python build files.
+build
+hacker_top.egg-info
