@@ -19,9 +19,6 @@ setup(
 	zip_safe = False,
 	include_package_data = True,
 
-	# Package dependencies.
-	install_requires = ['BeautifulSoup>=3.1.0.1'],
-
 	# Metadata for PyPI.
 	author = 'Peteris Krumins',
 	author_email = 'peter@catonmat.net',
