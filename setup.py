@@ -13,7 +13,7 @@ setup(
 	name = 'hacker-top',
 	version = '1.0',
 	scripts = ['hacker_top.py'],
-	py_modules = ['pyhackerstories'],
+	py_modules = ['pyhackerstories', 'BeautifulSoup'],
 
 	# Packaging options.
 	zip_safe = False,
