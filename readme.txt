@@ -72,11 +72,9 @@ up/down arrows (or j/k) - scrolls the news list up or down.
 Beta shortcuts:
 o - open the topmost URL in the default webbrowser
 t - open the topmost URL in a new tab in the default webbrowser
+c - open the topmost URL's comments in the default webbrowser
 
 [4]-Future-TODO-improvements--------------------------------------------------
-
-* Add a feature to open a story in web browser. (Someone suggested to use
-  webbrowser module)
 
 * Fix it to work on Windows. (Perhaps try the Console module)
 
