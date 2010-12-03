@@ -26,6 +26,6 @@ setup(
 	url = 'http://www.catonmat.net/blog/follow-hacker-news-from-the-console/',
 	keywords = 'hacker news cli',
 	description = 'A top-like program for monitoring stories on hacker news.',
-	long_description = open('readme.txt').read()
+	long_description = open('README.txt').read()
 
 )
