@@ -48,7 +48,7 @@ See my original article for a screenshot:
 Usage: ./hacker_top.py [-h|--help] - displays help message
 
 Usage: ./hacker_top.py [-i|--interval interval]
-          [-u|--utf8 <on|off>] [-n|--new]
+          [-u|--utf8 <on|off>] [-U|--url <on|off>] [-n|--new]
 
     -i or --interval specifies refresh interval.
     The default refresh interval is 3 minutes. Here are a few
@@ -57,6 +57,9 @@ Usage: ./hacker_top.py [-i|--interval interval]
     -u or --utf8 turns on utf8 output mode.
     Default: off. Use this if you know for sure that your
     terminal supports it, otherwise your terminal might turn into garbage.
+
+    -U or --url turns on printing of urls.
+    Default: off
 
     -n or --new follows only the newest hacker stories.
     Default: follow front page stories.
