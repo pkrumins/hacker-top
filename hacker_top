@@ -632,7 +632,7 @@ def parse_args(args):
             except Interval.IntervalError, e:
                 raise ArgError, e
         elif opt in ("-u", "--utf8"):
-            return_args['urf8'] = True
+            return_args['utf8'] = True
         elif opt in ("-n", "--new"):
             return_args['new'] = True
         else:
