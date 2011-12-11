@@ -109,77 +109,80 @@ def _extract_stories(content):
     vote_as = soup.findAll('a', id=re.compile(r'up_\d+'))
     subtext_tds = soup.findAll(mk_tag_finder('td', 'subtext', 1))
 
-    if len(title_tds) != len(subtext_tds) != len(vote_as):
-        raise RedesignError, "lengths of title, vote and subtext lists do not match"
+    #if len(title_tds) != len(subtext_tds) != len(vote_as):
+        #raise RedesignError, "lengths of title, vote and subtext lists do not match"
 
     for title_td, vote_a, subtext_td in zip(title_tds, vote_as, subtext_tds):
-        title_a = title_td.find('a')
-        if not title_a:
-            raise RedesignError, "title <a> was not found"
+        try:
+            title_a = title_td.find('a')
+            if not title_a:
+                raise RedesignError, "title <a> was not found"
 
-        title = title_a.string.strip()
-        url = title_a['href']
-        if url.startswith('item'): # link to the story itself
-            url = hacker_url + '/' + url
+            title = title_a.string.strip()
+            url = title_a['href']
+            if url.startswith('item'): # link to the story itself
+                url = hacker_url + '/' + url
 
-        m = re.search(r'up_(\d+)', vote_a['id'])
-        if not m:
-            raise RedesignError, "title id did not contain story id"
-        id = m.group(1)
-
-        score_span = subtext_td.find('span', id=re.compile(r'score_(\d+)'))
-        if not score_span:
-            raise RedesignError, "could not find <span> containing score"
-        m = re.search(r'(\d+) point', score_span.string)
-        if not m:
-            raise RedesignError, "unable to extract score"
-        score = int(m.group(1))
-
-        user_a = subtext_td.find('a', href=re.compile(r'^user'))
-        if not user_a:
-            raise RedesignError, "unable to find <a> containing username"
-        user = user_a.string
-
-        posted_re = re.compile(r'\s+(.+)\s+ago')
-        posted_text = subtext_td.find(text = posted_re)
-        if not posted_text:
-            raise RedesignError, "could not find posted ago text"
-        m = posted_re.search(posted_text);
-        posted_ago = m.group(1)
-        unix_time = _ago_to_unix(posted_ago)
-        if not unix_time:
-            raise RedesignError, "unable to extract story date"
-        human_time = time.ctime(unix_time)
-
-        comment_a = subtext_td.find('a', href=re.compile(r'^item'))
-        if not comment_a:
-            comments = -1
-        elif comment_a.string == "discuss":
-            comments = 0
-        else:
-            m = re.search(r'(\d+) comment', comment_a.string)
+            m = re.search(r'up_(\d+)', vote_a['id'])
             if not m:
-                raise RedesignError, "could not extract comment count"
-            comments = int(m.group(1))
+                raise RedesignError, "title id did not contain story id"
+            id = m.group(1)
 
-        subtext_urls = subtext_td.findAll('a')
-        comments_url = subtext_urls[-1]['href']
-        if not comments_url:
-            raise RedesignError, "could not find last <a href> in subtext containing comment URL"
-        comments_url = urljoin(hacker_url, comments_url)
+            score_span = subtext_td.find('span', id=re.compile(r'score_(\d+)'))
+            if not score_span:
+                raise RedesignError, "could not find <span> containing score"
+            m = re.search(r'(\d+) point', score_span.string)
+            if not m:
+                raise RedesignError, "unable to extract score"
+            score = int(m.group(1))
 
-        story = Story()
-        story.id = id
-        story.title = title.encode('utf8')
-        story.url = url.encode('utf8')
-        story.score = score
-        story.comments = comments
-        story.user = user.encode('utf8')
-        story.unix_time = unix_time
-        story.human_time = human_time.encode('utf8')
-        story.comments_url = comments_url.encode('utf8')
+            user_a = subtext_td.find('a', href=re.compile(r'^user'))
+            if not user_a:
+                raise RedesignError, "unable to find <a> containing username"
+            user = user_a.string
 
-        stories.append(story)
+            posted_re = re.compile(r'\s+(.+)\s+ago')
+            posted_text = subtext_td.find(text = posted_re)
+            if not posted_text:
+                raise RedesignError, "could not find posted ago text"
+            m = posted_re.search(posted_text);
+            posted_ago = m.group(1)
+            unix_time = _ago_to_unix(posted_ago)
+            if not unix_time:
+                raise RedesignError, "unable to extract story date"
+            human_time = time.ctime(unix_time)
+
+            comment_a = subtext_td.find('a', href=re.compile(r'^item'))
+            if not comment_a:
+                comments = -1
+            elif comment_a.string == "discuss":
+                comments = 0
+            else:
+                m = re.search(r'(\d+) comment', comment_a.string)
+                if not m:
+                    raise RedesignError, "could not extract comment count"
+                comments = int(m.group(1))
+
+            subtext_urls = subtext_td.findAll('a')
+            comments_url = subtext_urls[-1]['href']
+            if not comments_url:
+                raise RedesignError, "could not find last <a href> in subtext containing comment URL"
+            comments_url = urljoin(hacker_url, comments_url)
+
+            story = Story()
+            story.id = id
+            story.title = title.encode('utf8')
+            story.url = url.encode('utf8')
+            story.score = score
+            story.comments = comments
+            story.user = user.encode('utf8')
+            story.unix_time = unix_time
+            story.human_time = human_time.encode('utf8')
+            story.comments_url = comments_url.encode('utf8')
+
+            stories.append(story)
+        except:
+            pass
 
     return stories
 

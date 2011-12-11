@@ -12,7 +12,7 @@ setup(
 	# Basic package information.
 	name = 'hacker-top',
 	version = '1.0',
-	scripts = ['hacker_top.py'],
+	scripts = ['hacker_top'],
 	py_modules = ['pyhackerstories', 'BeautifulSoup'],
 
 	# Packaging options.

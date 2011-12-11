@@ -39,6 +39,9 @@ default_interval = '3m'
 # Change with -u|--utf command option
 default_can_utf8 = False
 
+# Do we want to show urls
+default_show_url = False
+
 # Monitor new stories?
 default_new = False
 
@@ -204,7 +207,19 @@ class BasicDisplay(DisplayMode):
     def do_display(self, story):
         title_line = self.format_title(story)
         self.display_title(title_line)
+        if interface.show_url:
+            self.display_url(story)
         self.display_info(story)
+
+    def display_url(self, story):
+        url = html_unescape(story.url)
+        if len(url) > (self.interface.body_max_x - 4):
+            url = url[:self.interface.body_max_x-8] + "..."
+        if not interface.can_utf8:
+            url = story.url.decode('utf8').encode('ascii', 'replace')
+        self.interface.body_win.addstr("    ")
+        self.interface.body_win.addstr(url[:4])
+        self.interface.body_win.addstr(url[4:] + "\n")
 
     def display_title(self, title_line):
         self.interface.body_win.addstr(title_line[:4])
@@ -339,6 +354,7 @@ class Interface(object):
     def __init__(self, args):
         self.update_secs = Interval(args['interval']).to_secs()
         self.can_utf8 = args['utf8']
+        self.show_url = args['url']
         self.new = args['new']
         self.pages_changed = True
         self.pages = 1
@@ -356,11 +372,17 @@ class Interface(object):
         except:
             pass
 
-        curses.init_pair(1, curses.COLOR_CYAN, curses.COLOR_BLACK)
-        curses.init_pair(2, curses.COLOR_WHITE, curses.COLOR_BLACK)
-        curses.init_pair(3, curses.COLOR_GREEN, curses.COLOR_BLACK)
-        curses.init_pair(4, curses.COLOR_YELLOW, curses.COLOR_BLACK)
-        curses.init_pair(5, curses.COLOR_RED, curses.COLOR_BLACK)
+        try:
+            curses.use_default_colors()
+            bg = -1
+        except:
+            bg = curses.COLOR_BLACK
+
+        curses.init_pair(1, curses.COLOR_CYAN, bg)
+        curses.init_pair(2, curses.COLOR_WHITE, bg)
+        curses.init_pair(3, curses.COLOR_GREEN, bg)
+        curses.init_pair(4, curses.COLOR_YELLOW, bg)
+        curses.init_pair(5, curses.COLOR_RED, bg)
 
         self.max_y, self.max_x = stdscr.getmaxyx()
 
@@ -606,13 +628,14 @@ def parse_args(args):
     ps. i don't like optparse. """
 
     try:
-        opts = getopt.getopt(args, "i:unh", ['interval=', 'utf8', 'new', 'help'])[0]
+        opts = getopt.getopt(args, "i:uUnh", ['interval=', 'utf8', 'url', 'new', 'help'])[0]
     except getopt.GetoptError, e:
         raise ArgError, str(e)
 
     return_args = {
         'interval': default_interval,
         'utf8': default_can_utf8,
+        'url': default_show_url,
         'new': default_new
     }
 
@@ -626,7 +649,9 @@ def parse_args(args):
             except Interval.IntervalError, e:
                 raise ArgError, e
         elif opt in ("-u", "--utf8"):
-            return_args['urf8'] = True
+            return_args['utf8'] = True
+        elif opt in ("-U", "--url"):
+            return_args['url'] = True
         elif opt in ("-n", "--new"):
             return_args['new'] = True
         else:
@@ -648,13 +673,14 @@ def print_head():
 def print_usage():
     print "Usage: %s [-h|--help] - displays this" % sys.argv[0]
     print "Usage: %s [-i|--interval interval] [-u|--utf8 <on|off>]" % sys.argv[0]
-    print "          [-n|--new]"
+    print "          [-n|--new] [-u|--utf8 <on|off>] [-U|--url <on|off>]"
     print
     print "-i|--interval specifies refresh interval."
     print " Valid examples: 10s (10 seconds), 12m (12 minutes), 42h (42 hours)."
     print " Default: %s" % default_interval
     print "-u|--utf8 turns on utf8 output mode. Use this if you know for sure that"
     print " your terminal supports it. Default: %s" % str(default_can_utf8)
+    print "-U|--url print url. Default: %s" % str(default_show_url)
     print "-n|--new specifies that new stories only should be monitored"
     print " Default: %s" % default_new
 
